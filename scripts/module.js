@@ -1,5 +1,5 @@
 import { DAY, HOUR, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
-Hooks.once("ready", async function () {
+Hooks.once("ready", function () {
   console.log("PF2E Uses Updater is Active");
   if (!game.user.isGM) return;
   Hooks.on("updateItem", async (item, changes, diff, userID) => {
