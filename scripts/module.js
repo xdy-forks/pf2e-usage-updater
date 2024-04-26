@@ -7,7 +7,7 @@ Hooks.once("ready", function () {
     //Ignore day (as that is handled by the system)
     const usesChange = changes?.system?.frequency?.value;
     const maxUses = item?.system?.frequency?.max;
-    if (usesChange && maxUses < usesChange) {
+    if (usesChange < maxUses) {
       // change is a frequency change, and it's lower than max
       if (!item.getFlag(MODULE_ID, "cooldown")) {
         const cooldown = getCoolDownTime(item?.system?.frequency);
