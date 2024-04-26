@@ -9,10 +9,14 @@ Hooks.once("ready", function () {
     const maxUses = item?.system?.frequency?.max;
     if (usesChange < maxUses) {
       // change is a frequency change, and it's lower than max
-      if (!item.getFlag(MODULE_ID, "cooldown")) {
+      const flag = item.getFlag(MODULE_ID, "cooldown");
+      if (!flag || flag.per !== item?.system?.frequency?.per) {
         const cooldown = getCoolDownTime(item?.system?.frequency);
         if (cooldown) {
-          item.setFlag(MODULE_ID, "cooldown", cooldown);
+          item.setFlag(MODULE_ID, "cooldown", {
+            cooldown,
+            per: item?.system?.frequency?.per,
+          });
         }
       }
     }
@@ -91,7 +95,7 @@ async function updateFrequency(character, total, situation = "default") {
 }
 
 export function isItemRelevant(item, total, situation) {
-  const cooldown = item.getFlag(MODULE_ID, "cooldown");
+  const { cooldown, _per } = item.getFlag(MODULE_ID, "cooldown");
   switch (situation) {
     case "updateTime":
       return (
@@ -106,7 +110,7 @@ export function isItemRelevant(item, total, situation) {
     default:
       return (
         item?.system?.frequency?.value < item?.system?.frequency?.max &&
-        item.getFlag(MODULE_ID, "cooldown") <= total
+        cooldown <= total
       );
   }
 }
