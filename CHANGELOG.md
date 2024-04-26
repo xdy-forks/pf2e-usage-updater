@@ -1,4 +1,4 @@
-## 0.1.0 - Initial Release
+## 0.9.0 - Initial Release
 - This simple module exists to update item uses of the party, and of combatants.
 - **Features**
   - **Decrease Action uses when sent to chat**
