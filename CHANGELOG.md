@@ -1,0 +1,13 @@
+## 0.1.0 - Initial Release
+- This simple module exists to update item uses of the party, and of combatants.
+- **Features**
+  - **Decrease Action uses when sent to chat**
+      - When you send an action like Orc Ferocity etc. to Chat will automatically reduce the uses
+  - **Refresh Party actions on Time Update**
+    - When time is progressed will track and refresh the party's actions when enough (world time) has passed for them to be up again
+    - **Limitation** The cooldown for refresh starts whenever you first reduce your action's use count so take that as you will
+    - **Note** - Actions with a cooldown of `Day` refresh on taking `Rest for the Night` (is a base pf2e feature)
+  - **Refresh Combatants Actions in Combat**
+    - For actions with a `per turn` or `per round` use count this refreshes those
+- **Compatibility**
+  - [Pf2e Action Support](https://github.com/reyzor1991/foundry-vtt-pf2e-action-support) - Automatically detects if you have this module active, and its decrease frequency feature and will disable this module's decrease frequency feature

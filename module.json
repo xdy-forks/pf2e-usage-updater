@@ -1,35 +1,33 @@
 {
-  "id": "module",
-  "title": "New Module",
-  "description": "",
+  "id": "pf2e-usage-updater",
+  "title": "PF2e Usage Updater",
+  "description": "Updates Usage of items for PF2e till it gets added to the main engine",
   "version": "#{VERSION}#",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
   "compatibility": {
     "minimum": 10,
-    "verified": 10,
-    "maximum": 11
+    "verified": 11
   },
   "authors": [
     {
-      "name": "The League of Extraordinary FVTT Developers",
-      "url": "https://github.com/League-of-Foundry-Developers",
-      "discord": "discordID#0001"
+      "name": "chasarooniZ"
     }
   ],
   "relationships": {
-    "systems": [],
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "5.2.1",
+          "verified": "5.3.0"
+        }
+      }
+    ],
     "requires": []
   },
-  "esmodules": [
-    "scripts/module.js"
-  ],
-  "scripts": [
-    "scripts/lib/lib.js"
-  ],
-  "styles": [
-    "styles/module.css"
-  ],
+  "esmodules": ["scripts/module.js"],
   "languages": [
     {
       "lang": "en",
@@ -41,7 +39,7 @@
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
   "license": "LICENSE",
-  "readme": "README.md",
+  "readme": "https://github.com/chasarooniZ/pf2e-usage-updater/blob/master/README.md",
   "media": [
     {
       "type": "icon",
