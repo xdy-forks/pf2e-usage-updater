@@ -75,7 +75,7 @@ async function updateFrequency(character, total, situation = "default") {
   });
   if (relevantItems.length > 0) {
     await character.updateEmbeddedDocuments(
-      "item",
+      "Item",
       relevantItems.map((it) => ({
         _id: it.id,
         system: { frequency: { value: it.system.frequency.max } },
