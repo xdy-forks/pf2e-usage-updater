@@ -20,12 +20,7 @@ Hooks.once("ready", function () {
 
   //Lowering Item use count if you don't have action support active
   Hooks.on("preCreateChatMessage", async (msg, _data, _info, _userID) => {
-    if (
-      !(
-        game.modules.get("pf2e-action-support")?.active &&
-        game.settings.get("pf2e-action-support", "decreaseFrequency")
-      )
-    ) {
+    if (checkActionSupport()) {
       const item = msg.item;
       if (item?.system?.frequency?.value) {
         await item.update({
@@ -58,6 +53,17 @@ Hooks.once("ready", function () {
     updateFrequencyOfActors(actors, 0, "endRound");
   });
 });
+
+function checkActionSupport() {
+  const actionSupportLikeModuleIDS = [
+    "pf2e-action-support",
+    "pf2e-additional-automations",
+  ];
+  return !actionSupportLikeModuleIDS.some(
+    (id) =>
+      game.modules.get(id)?.active && game.settings.get(id, "decreaseFrequency")
+  );
+}
 
 async function updateFrequencyOfActors(party, total, situation = "default") {
   for (const character of party) {
