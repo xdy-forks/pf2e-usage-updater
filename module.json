@@ -27,7 +27,7 @@
     ],
     "requires": []
   },
-  "esmodules": ["scripts/module.js"],
+  "esmodules": ["scripts/module.js", "scripts/settings.js"],
   "languages": [
     {
       "lang": "en",

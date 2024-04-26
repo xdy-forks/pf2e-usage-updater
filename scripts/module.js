@@ -36,9 +36,12 @@ Hooks.once("ready", function () {
 
   //Refreshing item usage count
   Hooks.on("updateWorldTime", async (total, _diff) => {
-    const party = game.actors.party.members;
+    const actors = game.actors.party.members;
+    if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
+      actors.push(...(canvas?.tokens?.placeables?.map((t) => t?.actor) ?? []));
+    }
     await updateFrequencyOfActors(
-      party,
+      actors,
       total,
       !game.combat ? "updateTime" : "default"
     );

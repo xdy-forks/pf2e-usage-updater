@@ -1,3 +1,13 @@
 {
-    "MODULE.hello": "hello"
+  "I18N.LANGUAGE": "English",
+  "pf2e-rpg-numbers": {
+    "module-settings": {
+      "include-canvas": {
+        "enabled": {
+          "name": "Include Canvas Tokens On Timebased Refreshed",
+          "hint": "When enabled will not just check the party, but also all tokens on the canvas to see to refresh their uses"
+        }
+      }
+    }
+  }
 }
