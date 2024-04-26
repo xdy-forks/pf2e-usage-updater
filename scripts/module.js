@@ -24,7 +24,7 @@ Hooks.once("ready", function () {
       const item = msg.item;
       if (item?.system?.frequency?.value) {
         await item.update({
-          system: { frequency: { value: it.system.frequency.value - 1 } },
+          system: { frequency: { value: item.system.frequency.value - 1 } },
         });
       }
     }
