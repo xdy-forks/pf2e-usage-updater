@@ -7,6 +7,6 @@ Hooks.on("init", () => {
     scope: "world",
     config: true,
     default: false,
-    type: boolean,
+    type: Boolean,
   });
 });
