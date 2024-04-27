@@ -1,3 +1,14 @@
+## 0.9.3 - Oh what a difference capitalization can make
+- Fixed issue with settings not populating (@Ghost_desu)
+## 0.9.2 - Features + Bugfixes
+- Added detection for if your frequency changes so that, it won't be stuck to the old cooldown
+- Added setting to allow you to toggle time based refresh for all tokens on current canvas
+  - _Note: If you have a lot of tokens, may have performance implications_
+
+_Shout out to @Rigo for a lot of early bug testing_
+## 0.9.1 - Usage Fixes + Extra Module support
+- Added Support for `pf2e-additional-automations` (@Mecha Maya)
+- Fix bug with usage not ticking down action count
 ## 0.9.0 - Initial Release
 - This simple module exists to update item uses of the party, and of combatants.
 - **Features**
