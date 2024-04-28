@@ -98,7 +98,8 @@ async function updateFrequency(character, total, situation = "default") {
 }
 
 export function isItemRelevant(item, total, situation) {
-  const { cooldown, _per } = item.getFlag(MODULE_ID, "cooldown");
+  const { cooldown, _per } = item?.getFlag(MODULE_ID, "cooldown");
+  if (!cooldown) return false;
   switch (situation) {
     case "updateTime":
       return (
