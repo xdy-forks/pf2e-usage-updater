@@ -1,3 +1,5 @@
+## 0.9.4 - More Bug Fixes Latest
+- Catches scenarios where items don't have flags
 ## 0.9.3 - Oh what a difference capitalization can make
 - Fixed issue with settings not populating (@Ghost_desu)
 ## 0.9.2 - Features + Bugfixes
