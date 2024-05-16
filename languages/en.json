@@ -7,6 +7,12 @@
           "name": "Include Canvas Tokens On Timebased Refreshed",
           "hint": "When enabled will not just check the party, but also all tokens on the canvas to see to refresh their uses"
         }
+      },
+      "automate-item": {
+        "aeon-pearly-white": {
+          "name": "Automate Aeon Stone (Pearly White Spindle)",
+          "hint": "Automates the healing for aeon stone pearly white spindle (currently only out of combat"
+        }
       }
     }
   }

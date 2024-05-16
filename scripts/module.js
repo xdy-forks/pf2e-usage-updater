@@ -35,7 +35,7 @@ Hooks.once("ready", function () {
   });
 
   //Refreshing item usage count
-  Hooks.on("updateWorldTime", async (total, _diff) => {
+  Hooks.on("updateWorldTime", async (total, diff) => {
     const actors = game.actors.party.members;
     if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
       actors.push(...(canvas?.tokens?.placeables?.map((t) => t?.actor) ?? []));
@@ -43,6 +43,7 @@ Hooks.once("ready", function () {
     await updateFrequencyOfActors(
       actors,
       total,
+      diff
       !game.combat ? "updateTime" : "default"
     );
   });
@@ -72,16 +73,16 @@ function checkActionSupport() {
   );
 }
 
-async function updateFrequencyOfActors(party, total, situation = "default") {
+async function updateFrequencyOfActors(party, total, diff, situation = "default") {
   for (const character of party) {
-    await updateFrequency(character, total, situation);
+    await updateFrequency(character, total, diff, situation);
   }
 }
 
-async function updateFrequency(character, total, situation = "default") {
+async function updateFrequency(character, total, diff, situation = "default") {
   const items = character.items.contents;
   const relevantItems = items.filter((it) =>
-    isItemRelevant(it, total, situation)
+    isItemRelevant(it, total, diff, situation)
   );
   relevantItems.forEach((it) => {
     it.unsetFlag(MODULE_ID, "cooldown");
@@ -97,9 +98,10 @@ async function updateFrequency(character, total, situation = "default") {
   }
 }
 
-export function isItemRelevant(item, total, situation) {
-  const { cooldown, _per } = item?.getFlag(MODULE_ID, "cooldown");
-  if (!cooldown) return false;
+export function isItemRelevant(item, total, diff, situation) {
+  const { cooldown = null } = item?.getFlag(MODULE_ID, "cooldown");
+  const isSpecialCase = checkAndHandleSpecialCase(item, total, diff, situation);
+  if (!cooldown && !isSpecialCase) return false;
   switch (situation) {
     case "updateTime":
       return (
@@ -147,4 +149,21 @@ export function getCoolDownTime(frequency) {
 
 export function getCombatActor() {
   [...game.combat.combatants.values()].map((com) => com.token.actor);
+}
+
+export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
+  const slug = item.system.slug;
+  const actor = item.actor;
+  switch(slug) {
+    case 'aeon-stone-pearly-white-spindle':
+      game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white")
+      const health = Math.floor(diff/60);
+      if (health > 0) {
+        new Roll(`${health}[Healing]`).toMessage({flavor: item.name, speaker: ChatMessage.getSpeaker()}) 
+      }
+      break;
+    default:
+      break;
+  }
+  return false;
 }

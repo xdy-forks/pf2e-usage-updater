@@ -9,4 +9,12 @@ Hooks.on("init", () => {
     default: false,
     type: Boolean,
   });
+  game.settings.register(MODULE_ID, "automate-item.aeon-pearly-white", {
+    name: game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.name`),
+    hint: game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.hint`),
+    scope: "world",
+    config: true,
+    default: false,
+    type: Boolean,
+  });
 });
