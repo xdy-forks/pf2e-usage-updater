@@ -43,7 +43,7 @@ Hooks.once("ready", function () {
     await updateFrequencyOfActors(
       actors,
       total,
-      diff
+      diff,
       !game.combat ? "updateTime" : "default"
     );
   });
@@ -73,7 +73,12 @@ function checkActionSupport() {
   );
 }
 
-async function updateFrequencyOfActors(party, total, diff, situation = "default") {
+async function updateFrequencyOfActors(
+  party,
+  total,
+  diff,
+  situation = "default"
+) {
   for (const character of party) {
     await updateFrequency(character, total, diff, situation);
   }
@@ -154,12 +159,18 @@ export function getCombatActor() {
 export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
   const slug = item.system.slug;
   const actor = item.actor;
-  switch(slug) {
-    case 'aeon-stone-pearly-white-spindle':
-      game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white")
-      const health = Math.floor(diff/60);
+  switch (slug) {
+    case "aeon-stone-pearly-white-spindle":
+      game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white");
+      const health = Math.min(
+        Math.floor(diff / 60),
+        actor.system.attributes.hp.max - actor.system.attributes.hp.value
+      );
       if (health > 0) {
-        new Roll(`${health}[Healing]`).toMessage({flavor: item.name, speaker: ChatMessage.getSpeaker()}) 
+        new Roll(`${health}[Healing]`).toMessage({
+          flavor: item.name,
+          speaker: ChatMessage.getSpeaker(),
+        });
       }
       break;
     default:
