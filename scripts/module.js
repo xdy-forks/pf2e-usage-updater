@@ -167,7 +167,8 @@ export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
         actor.system.attributes.hp.max - actor.system.attributes.hp.value
       );
       if (health > 0) {
-        new Roll(`${health}[Healing]`).toMessage({
+        const DamageRoll = CONFIG.Dice.rolls.find((r) => r.name === "DamageRoll");
+        new DamageRoll(`{${health}}[Healing]`).toMessage({
           flavor: item.name,
           speaker: ChatMessage.getSpeaker(),
         });
