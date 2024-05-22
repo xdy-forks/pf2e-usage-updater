@@ -1,3 +1,8 @@
+## 1.0.0 - Full Release
+- Fixed error messages for items that don't have usage
+- Added option to automate Aeon Stone (Pearly White Spindle) to settings
+## 0.9.5 - Fixed Localization
+- Fixed localization name to be correct
 ## 0.9.4 - More Bug Fixes Latest
 - Catches scenarios where items don't have flags
 ## 0.9.3 - Oh what a difference capitalization can make

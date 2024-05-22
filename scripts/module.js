@@ -175,7 +175,7 @@ export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
         );
         new DamageRoll(`{${health}}[Healing]`).toMessage({
           flavor: item.name,
-          speaker: ChatMessage.getSpeaker(),
+          speaker: actor,
         });
       }
       break;
