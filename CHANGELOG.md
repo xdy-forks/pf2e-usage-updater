@@ -1,3 +1,5 @@
+## 2.0.0 - V12 Support
+- Added Support for Fvtt `v12`
 ## 1.0.0 - Full Release
 - Fixed error messages for items that don't have usage
 - Added option to automate Aeon Stone (Pearly White Spindle) to settings
