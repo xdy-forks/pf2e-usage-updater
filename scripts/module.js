@@ -161,22 +161,23 @@ export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
   const actor = item.actor;
   switch (slug) {
     case "aeon-stone-pearly-white-spindle":
-      game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white");
-      if (item.system.usage.value !== "worn") {
-        break;
-      }
-      const health = Math.min(
-        Math.floor(diff / 60),
-        actor.system.attributes.hp.max - actor.system.attributes.hp.value
-      );
-      if (health > 0) {
-        const DamageRoll = CONFIG.Dice.rolls.find(
-          (r) => r.name === "DamageRoll"
+      if (game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white")) {
+        if (item.system.usage.value !== "worn") {
+          break;
+        }
+        const health = Math.min(
+          Math.floor(diff / 60),
+          actor.system.attributes.hp.max - actor.system.attributes.hp.value
         );
-        new DamageRoll(`{${health}}[Healing]`).toMessage({
-          flavor: item.name,
-          speaker: actor,
-        });
+        if (health > 0) {
+          const DamageRoll = CONFIG.Dice.rolls.find(
+            (r) => r.name === "DamageRoll"
+          );
+          new DamageRoll(`{${health}}[Healing]`).toMessage({
+            flavor: item.name,
+            speaker: ChatMessage.getSpeaker({actor}),
+          });
+        }
       }
       break;
     default:
