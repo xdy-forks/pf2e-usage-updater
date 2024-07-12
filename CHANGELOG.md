@@ -1,4 +1,4 @@
-## 2.0.1 - Pearly White Automation Fix
+## 7
 - Fixed Aeon Stone (Pearly White Spindle) automation
 ## 2.0.0 - V12 Support
 - Added Support for Fvtt `v12`
