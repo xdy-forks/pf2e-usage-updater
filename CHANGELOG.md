@@ -7,6 +7,7 @@
 - `Automatic Round Fixes`
   - Causes Round + Turn counters to reset on combat start
   - Fix them not reseting on next round
+  - Adds cooldown flags to items already used without one
 ## 2.0.1
 - Fixed Aeon Stone (Pearly White Spindle) automation
 ## 2.0.0 - V12 Support
