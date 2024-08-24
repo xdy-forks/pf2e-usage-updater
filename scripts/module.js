@@ -1,68 +1,25 @@
 import { DAY, HOUR, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
+import { combatRound, pf2eEndTurn, pf2eStartTurn, preCreateChatMessage, updateItem, updateWorldTime } from "./hooks.js";
+
 Hooks.once("ready", function () {
   console.log("PF2E Uses Updater is Active");
   if (!game.user.isGM) return;
-  Hooks.on("updateItem", async (item, changes, diff, userID) => {
-    //Use this to set item flags
-    //Ignore day (as that is handled by the system)
-    const usesChange = changes?.system?.frequency?.value;
-    const maxUses = item?.system?.frequency?.max;
-    if (usesChange < maxUses) {
-      // change is a frequency change, and it's lower than max
-      const flag = item.getFlag(MODULE_ID, "cooldown");
-      if (!flag || flag.per !== item?.system?.frequency?.per) {
-        const cooldown = getCoolDownTime(item?.system?.frequency);
-        if (cooldown) {
-          item.setFlag(MODULE_ID, "cooldown", {
-            cooldown,
-            per: item?.system?.frequency?.per,
-          });
-        }
-      }
-    }
-  });
+  Hooks.on("updateItem", updateItem);
 
   //Lowering Item use count if you don't have action support active
-  Hooks.on("preCreateChatMessage", async (msg, _data, _info, _userID) => {
-    if (checkActionSupport()) {
-      const item = msg.item;
-      if (item?.system?.frequency?.value) {
-        await item.update({
-          system: { frequency: { value: item.system.frequency.value - 1 } },
-        });
-      }
-    }
-  });
+  Hooks.on("preCreateChatMessage", preCreateChatMessage);
 
   //Refreshing item usage count
-  Hooks.on("updateWorldTime", async (total, diff) => {
-    const actors = game.actors.party.members;
-    if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
-      actors.push(...(canvas?.tokens?.placeables?.map((t) => t?.actor) ?? []));
-    }
-    await updateFrequencyOfActors(
-      actors,
-      total,
-      diff,
-      !game.combat ? "updateTime" : "default"
-    );
-  });
+  Hooks.on("updateWorldTime", updateWorldTime);
 
-  Hooks.on("pf2e.endTurn", async (combatant, _encounter, _userID) => {
-    updateFrequency(combatant.token.actor, 0, "endTurn");
-  });
-  Hooks.on("pf2e.startTurn", async (combatant, _encounter, _userID) => {
-    updateFrequency(combatant.token.actor, 0, "startTurn");
-  });
-  Hooks.on("combatRound", async (_encounter, _changes, _diff, _userID) => {
-    const actors = game.combat.combatants.contents.map(
-      (combatant) => combatant.token.actor
-    );
-    updateFrequencyOfActors(actors, 0, "endRound");
-  });
+  Hooks.on("pf2e.endTurn", pf2eEndTurn);
+  Hooks.on("pf2e.startTurn", pf2eStartTurn);
+  Hooks.on("combatRound", combatRound);
+
+  Hooks.on("combatStart", combatStart);
 });
 
-function checkActionSupport() {
+export function checkActionSupport() {
   const actionSupportLikeModuleIDS = [
     "pf2e-action-support",
     "pf2e-additional-automations",
@@ -73,7 +30,7 @@ function checkActionSupport() {
   );
 }
 
-async function updateFrequencyOfActors(
+export async function updateFrequencyOfActors(
   party,
   total,
   diff,
@@ -116,8 +73,9 @@ export function isItemRelevant(item, total, diff, situation) {
     case "startTurn":
     case "endTurn":
       return cooldown === "turn";
+    case "startCombat":
     case "endRound":
-      return cooldown === "round" || cooldown === "turn";
+      return ["turn", "round"].includes(cooldown);
     default:
       return (
         item?.system?.frequency?.value < item?.system?.frequency?.max &&
@@ -153,15 +111,16 @@ export function getCoolDownTime(frequency) {
 }
 
 export function getCombatActor() {
-  [...game.combat.combatants.values()].map((com) => com.token.actor);
+  game.combat.combatants.contents.map((com) => com.token.actor);
 }
 
-export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
+export async function checkAndHandleSpecialCase(item, _total, diff, _situation) {
   const slug = item.system.slug;
   const actor = item.actor;
   switch (slug) {
     case "aeon-stone-pearly-white-spindle":
-      if (game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white")) {
+      const mode = game.settings.get(MODULE_ID, "automate-item.aeon-pearly-white");
+      if (mode !== 'disabled') {
         if (item.system.usage.value !== "worn") {
           break;
         }
@@ -170,13 +129,18 @@ export function checkAndHandleSpecialCase(item, _total, diff, _situation) {
           actor.system.attributes.hp.max - actor.system.attributes.hp.value
         );
         if (health > 0) {
-          const DamageRoll = CONFIG.Dice.rolls.find(
-            (r) => r.name === "DamageRoll"
-          );
-          new DamageRoll(`{${health}}[Healing]`).toMessage({
-            flavor: item.name,
-            speaker: ChatMessage.getSpeaker({actor}),
-          });
+          if (mode === 'roll') {
+            const DamageRoll = CONFIG.Dice.rolls.find(
+              (r) => r.name === "DamageRoll"
+            );
+            new DamageRoll(`{${health}}[Healing]`).toMessage({
+              flavor: item.name,
+              speaker: ChatMessage.getSpeaker({ actor }),
+            });
+          } else if (mode === 'auto') {
+            await actor.update({ "system.attributes.hp.value": health })
+            await ChatMessage.create({ content: `@UUID[Compendium.pf2e.equipment-srd.Item.4A8SFipG78SMWQEU] healed <b>${actor.name}</b> for ${health}` })
+          }
         }
       }
       break;

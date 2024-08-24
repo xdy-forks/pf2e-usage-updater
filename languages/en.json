@@ -11,7 +11,12 @@
       "automate-item": {
         "aeon-pearly-white": {
           "name": "Automate Aeon Stone (Pearly White Spindle)",
-          "hint": "Automates the healing for aeon stone pearly white spindle (currently only out of combat"
+          "hint": "Automates the healing for aeon stone pearly white spindle (currently only out of combat) (Roll: Roll healing, Automatic: Heal actor + msg)",
+          "choices": {
+            "disabled": "Disabled",
+            "roll": "Roll",
+            "Auto": "Automatic"
+          }
         }
       }
     }
