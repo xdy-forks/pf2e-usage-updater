@@ -61,6 +61,7 @@ export async function updateFrequency(character, total, diff, situation = "defau
 }
 
 export function isItemRelevant(item, total, diff, situation) {
+  if (!item?.getFlag(MODULE_ID, "cooldown")) updateItem(item, item, _diff, _userID);
   const { cooldown } = item?.getFlag(MODULE_ID, "cooldown") || {};
   const isSpecialCase = checkAndHandleSpecialCase(item, total, diff, situation);
   if (!cooldown && !isSpecialCase) return false;
