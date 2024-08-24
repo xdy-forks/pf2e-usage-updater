@@ -1,5 +1,5 @@
 import { MODULE_ID } from "./helper/const.js";
-import { checkActionSupport, getCoolDownTime, updateFrequencyOfActors } from "./module.js";
+import { checkActionSupport, getCoolDownTime, updateFrequency, updateFrequencyOfActors } from "./module.js";
 
 export async function updateItem(item, changes, _diff, _userID) {
     //Use this to set item flags

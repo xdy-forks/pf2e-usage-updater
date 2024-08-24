@@ -41,7 +41,7 @@ export async function updateFrequencyOfActors(
   }
 }
 
-async function updateFrequency(character, total, diff, situation = "default") {
+export async function updateFrequency(character, total, diff, situation = "default") {
   const items = character.items.contents;
   const relevantItems = items.filter((it) =>
     isItemRelevant(it, total, diff, situation)
