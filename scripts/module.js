@@ -139,7 +139,7 @@ export async function checkAndHandleSpecialCase(item, _total, diff, _situation) 
               speaker: ChatMessage.getSpeaker({ actor }),
             });
           } else if (mode === 'auto') {
-            await actor.update({ "system.attributes.hp.value": health })
+            await actor.update({ "system.attributes.hp.value": health + actor.system.attributes.hp.value })
             await ChatMessage.create({ content: `@UUID[Compendium.pf2e.equipment-srd.Item.4A8SFipG78SMWQEU] healed <b>${actor.name}</b> for ${health}` })
           }
         }
