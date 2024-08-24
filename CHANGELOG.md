@@ -1,4 +1,13 @@
-## 7
+## 2.1.0
+- `Aeon Stone (Pearly White Spindle) automation`
+  - Changed settings options
+    - `Disabled` - Disabled
+    - `Roll` - Roll healing to chat
+    - `Automatic` - Heal actor automatically and then send chat message
+- `Automatic Round Fixes`
+  - Causes Round + Turn counters to reset on combat start
+  - Fix them not reseting on next round
+## 2.0.1
 - Fixed Aeon Stone (Pearly White Spindle) automation
 ## 2.0.0 - V12 Support
 - Added Support for Fvtt `v12`
