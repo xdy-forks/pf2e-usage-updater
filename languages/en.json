@@ -15,7 +15,7 @@
           "choices": {
             "disabled": "Disabled",
             "roll": "Roll",
-            "Auto": "Automatic"
+            "auto": "Automatic"
           }
         }
       }
