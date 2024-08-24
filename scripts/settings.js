@@ -14,7 +14,12 @@ Hooks.on("init", () => {
     hint: game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.hint`),
     scope: "world",
     config: true,
-    default: false,
-    type: Boolean,
+    default: "disabled",
+    type: String,
+    choices: {
+      "disabled": game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.choices.disabled`),
+      "roll": game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.choices.roll`),
+      "auto": game.i18n.localize(`${MODULE_ID}.module-settings.automate-item.aeon-pearly-white.choices.auto`)
+    },
   });
 });
