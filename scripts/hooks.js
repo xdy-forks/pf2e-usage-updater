@@ -46,18 +46,18 @@ export async function updateWorldTime(total, diff) {
 }
 
 export async function pf2eEndTurn(combatant, _encounter, _userID) {
-    await updateFrequency(combatant.token.actor, 0, "endTurn");
+    await updateFrequency(combatant.token.actor, 0, {}, "endTurn");
 }
 
 export async function pf2eStartTurn(combatant, _encounter, _userID) {
-    await updateFrequency(combatant.token.actor, 0, "startTurn");
+    await updateFrequency(combatant.token.actor, 0, {}, "startTurn");
 }
 
 export async function combatRound(encounter, _changes, _diff, _userID) {
     const actors = encounter.combatants.contents.map(
         (combatant) => combatant.token.actor
     );
-    await updateFrequencyOfActors(actors, 0, "endRound");
+    await updateFrequencyOfActors(actors, 0, _diff, "endRound");
 }
 
 
@@ -65,5 +65,5 @@ export async function combatStart(encounter, _current) {
     const actors = encounter.combatants.contents.map(
         (combatant) => combatant.token.actor
     );
-    await updateFrequencyOfActors(actors, 0, "startCombat");
+    await updateFrequencyOfActors(actors, 0, {}, "startCombat");
 }
