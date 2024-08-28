@@ -1,5 +1,5 @@
 import { DAY, HOUR, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
-import { combatRound, combatStart pf2eEndTurn, pf2eStartTurn, preCreateChatMessage, updateItem, updateWorldTime } from "./hooks.js";
+import { combatRound, combatStart, pf2eEndTurn, pf2eStartTurn, preCreateChatMessage, updateItem, updateWorldTime } from "./hooks.js";
 
 Hooks.once("ready", function () {
   console.log("PF2E Uses Updater is Active");

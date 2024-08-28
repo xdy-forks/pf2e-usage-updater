@@ -1,3 +1,13 @@
+## 2.1.4 - Oh the Commas
+- Fixed bug with end turn automation (@YoSoyEd)
+## 2.1.3 - Ready, Steady, Go Latest
+- Fixed bug where turn and around effects weren't resetting at combat start (@samgrieve)
+## 2.1.2
+- `Bug Fixes` (thank to @Maple)
+  - Fixed localization of some settings choices
+  - fixed `Auto` so that it adds the HP, not sets you to the HP
+## 2.1.1 - Run it Back
+- Actually merged the feature branch this time
 ## 2.1.0
 - `Aeon Stone (Pearly White Spindle) automation`
   - Changed settings options
