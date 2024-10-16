@@ -72,8 +72,8 @@ export function isItemRelevant(item, total, diff, situation) {
         (cooldown <= total || ["turn", "round"].includes(cooldown))
       );
     case "startTurn":
-    case "endTurn":
       return cooldown === "turn";
+    case "endTurn":
     case "startCombat":
     case "endRound":
       return ["turn", "round"].includes(cooldown);
