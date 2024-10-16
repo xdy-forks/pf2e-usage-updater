@@ -12,7 +12,7 @@ Hooks.once("ready", function () {
   //Refreshing item usage count
   Hooks.on("updateWorldTime", updateWorldTime);
 
-  Hooks.on("pf2e.endTurn", pf2eEndTurn);
+  // Hooks.on("pf2e.endTurn", pf2eEndTurn);
   Hooks.on("pf2e.startTurn", pf2eStartTurn);
   Hooks.on("combatRound", combatRound);
 
@@ -54,7 +54,7 @@ export async function updateFrequency(character, total, diff, situation = "defau
       "Item",
       relevantItems.map((it) => ({
         _id: it.id,
-        system: { frequency: { value: it.system.frequency.max } },
+        system: { frequency: { value: it?.system?.frequency?.max ?? 1 } },
       }))
     );
   }
@@ -73,7 +73,7 @@ export function isItemRelevant(item, total, diff, situation) {
       );
     case "startTurn":
       return cooldown === "turn";
-    case "endTurn":
+    //case "endTurn":
     case "startCombat":
     case "endRound":
       return ["turn", "round"].includes(cooldown);

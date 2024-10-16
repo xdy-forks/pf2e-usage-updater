@@ -45,9 +45,9 @@ export async function updateWorldTime(total, diff) {
     );
 }
 
-export async function pf2eEndTurn(combatant, _encounter, _userID) {
-    await updateFrequency(combatant.token.actor, 0, {}, "endTurn");
-}
+// export async function pf2eEndTurn(combatant, _encounter, _userID) {
+//     await updateFrequency(combatant.token.actor, 0, {}, "endTurn");
+// }
 
 export async function pf2eStartTurn(combatant, _encounter, _userID) {
     await updateFrequency(combatant.token.actor, 0, {}, "startTurn");
