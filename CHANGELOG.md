@@ -1,3 +1,6 @@
+## [2.1.5](https://github.com/ChasarooniZ/pf2e-usage-updater/compare/2.1.4...2.1.5) - Fixing End Turn Stuff
+- ~~`End turn`~~ -> `Start of Turn` to check for turn cooldowns
+- Handled can't find max frequency error
 ## 2.1.4 - Oh the Commas
 - Fixed bug with end turn automation (@YoSoyEd)
 ## 2.1.3 - Ready, Steady, Go Latest
