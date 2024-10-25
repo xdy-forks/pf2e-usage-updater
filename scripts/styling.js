@@ -35,7 +35,7 @@ const icons = {
         half: 'far fa-clock'
     },
     minute: {
-        full: 'fad fa-hourglass-half',
+        full: 'fas fa-hourglass-half',
         half: 'fad fa-hourglass-end'
     },
     turn: {
