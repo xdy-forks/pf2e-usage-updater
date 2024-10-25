@@ -44,3 +44,89 @@ export async function combatRound(encounter, _changes, _diff, _userID) {
     );
     await updateFrequencyOfActors(actors, 0, _diff, "endRound");
 }
+
+Hooks.on("renderCharacterSheetPF2e", (_sheet, html, character) => {
+    const a = _sheet.actor;
+    if (character.owner) {
+        const inventoryList = html.find(
+            ".sheet-body .inventory-list.directory-list.inventory-pane"
+        );
+
+        showCooldownsOnSheet(inventoryList, a);
+
+    }
+})
+
+function showCooldownsOnSheet(inventoryList, a) {
+    const items = a?.items?.contents.filter(i => {
+        const cd = i.getFlag("pf2e-usage-updater", "cooldown");
+        return !!cd && !["round", "turn"].includes(cd?.per)
+    })
+    const currentTime = game.time.worldTime;
+    if (items) {
+        for (const item of items) {
+            const id = item.id;
+            const cooldown = item.getFlag("pf2e-usage-updater", "cooldown")?.cooldown;
+            const timeRemainingInSeconds = cooldown - currentTime;
+            const timeFormat = formatTime(timeRemainingInSeconds);
+            const inventoryItem = $(inventoryList).find($("li")).filter($(id));
+
+            $(inventoryItem)
+                .find("div.item-name")
+                .append(
+                    $(
+                        `s<i class="fas fa-hourglass-start" data-tooltip="${timeFormat}"></i>`
+                    )
+                );
+        }
+    }
+}
+
+function formatTime(seconds, format = 1, icons = {
+    days: 'fa-calendar-day',
+    hours: 'fa-clock',
+    minutes: 'fa-hourglass-half',
+    seconds: 'fa-stopwatch'
+}) {
+    const units = [
+        { name: 'day', seconds: 86400 },
+        { name: 'hour', seconds: 3600 },
+        { name: 'minute', seconds: 60 },
+        { name: 'second', seconds: 1 }
+    ];
+
+    let result = [];
+    let largestUnit = null;
+
+    for (let unit of units) {
+        const count = Math.floor(seconds / unit.seconds);
+        if (count > 0 || result.length > 0) {
+            result.push({ name: unit.name, count: count });
+            seconds %= unit.seconds;
+            if (!largestUnit) largestUnit = { name: unit.name, count: count };
+        }
+    }
+
+    switch (format) {
+        case 1:
+            return result.map(r => `${r.count} ${r.name.charAt(0)}`).join(' ');
+        case 2:
+            return `${largestUnit.count} ${largestUnit.name.charAt(0)}`;
+        case 3:
+            return result.map(r => `${r.count} ${r.name}${r.count !== 1 ? 's' : ''}`).join(' ');
+        case 4:
+            return `${largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
+        case 5:
+            let iconOutput = '';
+            for (let unit of units) {
+                const count = Math.floor(seconds / unit.seconds);
+                if (count > 0) {
+                    iconOutput += `<i class="fas ${icons[unit.name + 's']}"></i>`.repeat(count);
+                    seconds %= unit.seconds;
+                }
+            }
+            return iconOutput;
+        default:
+            return 'Invalid format';
+    }
+}
