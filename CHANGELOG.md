@@ -1,11 +1,16 @@
-## 2.2.0 - Chilling
+## 2.2.0 - Feel like a Kami
 
-- This update is for PF2e `6.5.0`
+- Now requires PF2e System version `6.5.0`+
+- **Iconic**
+  - Now have the option to show time remaining on a cooldown
+  - There are options to show remaining time in a number of different formats
+  - In addition this can be toggled as `GM Only` to keep players in the dark about how much time has passed specifically
+- **Misc**
+  - Removed handling of updating item usage as it is handled by system now
+  - Removed handling of refreshing cooldowns for `turn` and `round` abilities as they are handled by the system now
+  - Cooldowns now accurately reflect time left, see `major note` below
 - **MAJOR NOTE**
   - in previous versions of this module I treated minutes as seconds on accident, so all previous cooldowns are off by a factor of 60 (IE 60 x less than what they should've been)
-- Cooldowns now accurately reflect time left
-- Removed handling of updating item usage as it is handled by system now
-- Removed handling of refreshing cooldowns for `turn` and `round` abilities as they are handled by the system now
 
 ## [2.1.5](https://github.com/ChasarooniZ/pf2e-usage-updater/compare/2.1.4...2.1.5) - Fixing End Turn Stuff
 
