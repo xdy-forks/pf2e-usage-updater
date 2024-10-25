@@ -4,6 +4,11 @@
 - Removed handling of updating item usage as it is handled by system now
 - Removed handling of refreshing cooldowns for `turn` and `round` abilities as they are handled by the system now
 
+## [2.1.5](https://github.com/ChasarooniZ/pf2e-usage-updater/compare/2.1.4...2.1.5) - Fixing End Turn Stuff
+
+- ~~`End turn`~~ -> `Start of Turn` to check for turn cooldowns
+- Handled can't find max frequency error
+
 ## 2.1.4 - Oh the Commas
 
 - Fixed bug with end turn automation (@YoSoyEd)
