@@ -13,6 +13,14 @@ Hooks.once("ready", function () {
   Hooks.on("combatRound", combatRound);
 });
 
+/**
+ * Updates the frequency of items for multiple actors.
+ * @param {Array} party - The array of actors to update.
+ * @param {number} total - The total time elapsed.
+ * @param {number} diff - The time difference.
+ * @param {string} [situation="default"] - The situation context.
+ * @returns {Promise<void>}
+ */
 export async function updateFrequencyOfActors(
   party,
   total,
@@ -24,6 +32,14 @@ export async function updateFrequencyOfActors(
   }
 }
 
+/**
+ * Updates the frequency of items for a single actor.
+ * @param {Object} character - The actor to update.
+ * @param {number} total - The total time elapsed.
+ * @param {number} diff - The time difference.
+ * @param {string} [situation="default"] - The situation context.
+ * @returns {Promise<void>}
+ */
 export async function updateFrequency(character, total, diff, situation = "default") {
   const items = character.items.contents;
   const relevantItems = items.filter((it) =>
@@ -43,10 +59,18 @@ export async function updateFrequency(character, total, diff, situation = "defau
   }
 }
 
-export async function isItemRelevant(item, total, diff, situation) {
+/**
+ * Checks if an item is relevant for updating based on cooldown and situation.
+ * @param {Object} item - The item to check.
+ * @param {number} total - The total time elapsed.
+ * @param {number} diff - The time difference.
+ * @param {string} situation - The situation context.
+ * @returns {Promise<boolean>}
+ */
+export function isItemRelevant(item, total, diff, situation) {
   if (!item?.getFlag(MODULE_ID, "cooldown")) updateItem(item, item, diff, null);
   const { cooldown } = item?.getFlag(MODULE_ID, "cooldown") || {};
-  const isSpecialCase = await checkAndHandleSpecialCase(item, total, diff, situation);
+  const isSpecialCase = checkAndHandleSpecialCase(item, total, diff, situation);
   if (!cooldown && !isSpecialCase) return false;
   switch (situation) {
     case "updateTime":
@@ -64,6 +88,11 @@ export async function isItemRelevant(item, total, diff, situation) {
   }
 }
 
+/**
+ * Calculates the cooldown time for a given frequency.
+ * @param {Object} frequency - The frequency object.
+ * @returns {string|number} The cooldown time or a string representing a special case.
+ */
 export function getCoolDownTime(frequency) {
   const currentTime = game.time.worldTime;
   switch (frequency.per) {
@@ -90,10 +119,22 @@ export function getCoolDownTime(frequency) {
   }
 }
 
+/**
+ * Retrieves the actors in the current combat.
+ * @returns {Array} An array of actors in the combat.
+ */
 export function getCombatActor() {
   game.combat.combatants.contents.map((com) => com.token.actor);
 }
 
+/**
+ * Checks and handles special cases for specific items.
+ * @param {Object} item - The item to check.
+ * @param {number} _total - The total time elapsed (unused).
+ * @param {number} diff - The time difference.
+ * @param {string} _situation - The situation context (unused).
+ * @returns {Promise<boolean>}
+ */
 export async function checkAndHandleSpecialCase(item, _total, diff, _situation) {
   const slug = item.system.slug;
   const actor = item.actor;
