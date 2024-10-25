@@ -40,21 +40,21 @@ Hooks.on("init", () => {
     default: true,
     type: Boolean,
   });
-});
 
-game.settings.register(MODULE_ID, "inventory.icon.style", {
-  name: game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.name`),
-  hint: game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.hint`),
-  scope: "world",
-  config: true,
-  default: "symbols",
-  type: String,
-  choices: {
-    "disabled": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.disabled`),
-    "symbols": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.symbols`),
-    "largest-full": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.largest-full`),
-    "largest-short": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.largest-short`),
-    "all-full": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.all-full`),
-    "all-short": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.all-short`),
-  },
+  game.settings.register(MODULE_ID, "inventory.icon.style", {
+    name: game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.name`),
+    hint: game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.hint`),
+    scope: "world",
+    config: true,
+    default: "symbols",
+    type: String,
+    choices: {
+      "disabled": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.disabled`),
+      "symbols": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.symbols`),
+      "largest-full": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.largest-full`),
+      "largest-short": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.largest-short`),
+      "all-full": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.all-full`),
+      "all-short": game.i18n.localize(`${MODULE_ID}.module-settings.inventory.icon.style.choices.all-short`),
+    },
+  });
 });
