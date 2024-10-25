@@ -19,6 +19,8 @@ export async function updateItem(item, changes, _diff, _userID) {
                 });
             }
         }
+    } else if (usesChange && usesChange === maxUses) {
+        item.unsetFlag(MODULE_ID, "cooldown")
     }
 }
 
