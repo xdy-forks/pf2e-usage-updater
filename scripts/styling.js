@@ -70,7 +70,7 @@ function formatTime(seconds, format = 'symbols') {
                 if (largestUnit.remainder > 0) {
                     iconOutput += `<i class='far ${icons[largestUnit.name + 's']}'></i>`;
                 }
-                iconOutput += `<i class='fas ${icons[largestUnit.name + 's']}'></i>`.repeat(largestUnit.count);
+                iconOutput += `<i class='fas ${icons[largestUnit.name + 's']}'></i> `.repeat(largestUnit.count);
             }
             return iconOutput;
         default:
