@@ -1,4 +1,4 @@
-import { DAY, HOUR, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
+import { DAY, HOUR, MINUTE, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
 import { combatRound, updateItem, updateWorldTime } from "./hooks.js";
 
 Hooks.once("ready", function () {
@@ -101,9 +101,9 @@ export function getCoolDownTime(frequency) {
     case "round":
       return "round";//Note this is handled by the system (in combat)
     case "PT1M": // per 1 Minute
-      return currentTime + 1;
+      return currentTime + MINUTE;
     case "PT10M": // per 10 Minutes
-      return currentTime + 10;
+      return currentTime + (10 * MINUTE);
     case "PT1H": // per 1 hour
       return currentTime + HOUR;
     case "PT24H": // per 24 hours
