@@ -26,11 +26,26 @@ export function showCooldownsOnSheet(actionsList, a) {
     }
 }
 const icons = {
-    days: 'fa-calendar-day',
-    hours: 'fa-clock',
-    minutes: 'fa-hourglass-half',
-    turns: 'fa-stopwatch',
-    seconds: 'fa-stopwatch'
+    day: {
+        full: 'fas fa-calendar-day',
+        half: 'fad fa-calendar-day'
+    },
+    hour: {
+        full: 'fas fa-clock',
+        half: 'far fa-clock'
+    },
+    minute: {
+        full: 'fad fa-hourglass-half',
+        half: 'fad fa-hourglass-end'
+    },
+    turn: {
+        full: 'fas fa-stopwatch',
+        half: 'far fa-stopwatch'
+    },
+    second: {
+        full: 'fad fa-stopwatch',
+        half: ''
+    }
 }
 
 function formatTime(seconds, format = 'symbols') {
@@ -67,10 +82,10 @@ function formatTime(seconds, format = 'symbols') {
         case 'symbols':
             let iconOutput = '';
             if (largestUnit.count > 0) {
+                iconOutput += `<i class='${icons[largestUnit.name].full}'></i> `.repeat(largestUnit.count);
                 if (largestUnit.remainder > 0) {
-                    iconOutput += `<i class='far ${icons[largestUnit.name + 's']}'></i>`;
+                    iconOutput += `<i class='${icons[largestUnit.name].half}'></i>`;
                 }
-                iconOutput += `<i class='fas ${icons[largestUnit.name + 's']}'></i> `.repeat(largestUnit.count);
             }
             return iconOutput;
         default:
