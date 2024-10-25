@@ -65,9 +65,9 @@ function formatTime(seconds, format = 'symbols') {
         case 'symbols':
             let iconOutput = '';
             if (count > 0) {
-                iconOutput += `<i class="fas ${icons[unit.name + 's']}"></i>`.repeat(largestUnit.count);
+                iconOutput += `<i class="fas ${icons[largestUnit.name + 's']}"></i>`.repeat(largestUnit.count);
                 if (largestUnit.remainder > 0) {
-                    iconOutput += `<i class="far ${icons[unit.name + 's']}"></i>`;
+                    iconOutput += `<i class="far ${icons[largestUnit.name + 's']}"></i>`;
                 }
             }
             return iconOutput;
