@@ -1,5 +1,6 @@
 import { MODULE_ID } from "./helper/const.js";
 import { getCoolDownTime, updateFrequencyOfActors } from "./module.js";
+import { showCooldownsOnSheet } from "./styling.js";
 
 export async function updateItem(item, changes, _diff, _userID) {
     //Use this to set item flags
