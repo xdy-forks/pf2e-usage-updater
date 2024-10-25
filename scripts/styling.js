@@ -38,7 +38,7 @@ function formatTime(seconds, format = 'symbols') {
         { name: 'day', seconds: DAY },
         { name: 'hour', seconds: HOUR },
         { name: 'minute', seconds: MINUTE },
-        { name: 'turns', seconds: 6 }
+        { name: 'turn', seconds: 6 }
     ];
 
     let result = [];
@@ -49,7 +49,7 @@ function formatTime(seconds, format = 'symbols') {
         if (count > 0 || result.length > 0) {
             result.push({ name: unit.name, count: count, remainder: count % unit.seconds });
             seconds %= unit.seconds;
-            if (!largestUnit) largestUnit = { name: unit.name, count: count, remainder: count % unit.seconds };
+            if (!largestUnit) largestUnit = { name: unit.name, count: count, remainder: seconds % unit.seconds };
         }
     }
 
@@ -59,11 +59,11 @@ function formatTime(seconds, format = 'symbols') {
         case 'all-short':
             return result.map(r => `${r.count}${r.name.charAt(0)}`).join(' ');
         case 'largest-short':
-            return `${largestUnit.remainder > 0 ? '>' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name.charAt(0)}`;
+            return `${largestUnit.remainder > 0 ? '< ' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name.charAt(0)}`;
         case 'all-full':
             return result.map(r => `${r.count} ${r.name}${r.count !== 1 ? 's' : ''}`).join(' ');
         case 'largest-full':
-            return `${largestUnit.remainder > 0 ? '>' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
+            return `${largestUnit.remainder > 0 ? '< ' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
         case 'symbols':
             let iconOutput = '';
             if (largestUnit.count > 0) {
