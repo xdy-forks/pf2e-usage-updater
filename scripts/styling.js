@@ -25,20 +25,19 @@ export function showCooldownsOnSheet(actionsList, a) {
         }
     }
 }
-
-function formatTime(seconds, format = 'symbols', icons = {
+const icons = {
     days: 'fa-calendar-day',
     hours: 'fa-clock',
     minutes: 'fa-hourglass-half',
     seconds: 'fa-stopwatch'
-}) {
+}
+function formatTime(seconds, format = 'symbols') {
     const units = [
         { name: 'day', seconds: DAY },
         { name: 'hour', seconds: HOUR },
         { name: 'minute', seconds: MINUTE },
         { name: 'turns', seconds: 6 }
     ];
-    // Turn last second to rounds
 
     let result = [];
     let largestUnit = null;
@@ -46,9 +45,9 @@ function formatTime(seconds, format = 'symbols', icons = {
     for (let unit of units) {
         const count = Math.floor(seconds / unit.seconds);
         if (count > 0 || result.length > 0) {
-            result.push({ name: unit.name, count: count });
+            result.push({ name: unit.name, count: count, remainder: count % unit.seconds });
             seconds %= unit.seconds;
-            if (!largestUnit) largestUnit = { name: unit.name, count: count };
+            if (!largestUnit) largestUnit = { name: unit.name, count: count, remainder: count % unit.seconds };
         }
     }
 
@@ -58,19 +57,17 @@ function formatTime(seconds, format = 'symbols', icons = {
         case 'all-short':
             return result.map(r => `${r.count}${r.name.charAt(0)}`).join(' ');
         case 'largest-short':
-            return `${largestUnit.count} ${largestUnit.name.charAt(0)}`;
+            return `${largestUnit.remainder > 0 ? '>' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name.charAt(0)}`;
         case 'all-full':
             return result.map(r => `${r.count} ${r.name}${r.count !== 1 ? 's' : ''}`).join(' ');
         case 'largest-full':
-            return `${largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
+            return `${largestUnit.remainder > 0 ? '>' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
         case 'symbols':
             let iconOutput = '';
-            let i = 0;
-            for (let unit of units) {
-                const count = Math.floor(seconds / unit.seconds);
-                if (count > 0) {
-                    iconOutput += `<i class="fas ${icons[unit.name + 's']}"></i>`.repeat(count);
-                    seconds %= unit.seconds;
+            if (count > 0) {
+                iconOutput += `<i class="fas ${icons[unit.name + 's']}"></i>`.repeat(largestUnit.count);
+                if (largestUnit.remainder > 0) {
+                    iconOutput += `<i class="far ${icons[unit.name + 's']}"></i>`;
                 }
             }
             return iconOutput;
