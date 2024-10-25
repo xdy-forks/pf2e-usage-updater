@@ -15,7 +15,7 @@ export function showCooldownsOnSheet(actionsList, a) {
             const actionItem = $(actionsList).find($("li")).filter($(id));
 
             $(actionItem)
-                .find("div.item-name")
+                .find("h4.name")
                 .append(
                     $(
                         `<i class="fas fa-hourglass-start" data-tooltip="${timeFormat}"></i>`
