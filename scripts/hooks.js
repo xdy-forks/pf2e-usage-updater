@@ -21,17 +21,6 @@ export async function updateItem(item, changes, _diff, _userID) {
     }
 }
 
-export async function preCreateChatMessage(msg, _data, _info, _userID) {
-    if (checkActionSupport()) {
-        const item = msg.item;
-        if (item?.system?.frequency?.value) {
-            await item.update({
-                system: { frequency: { value: item.system.frequency.value - 1 } },
-            });
-        }
-    }
-}
-
 export async function updateWorldTime(total, diff) {
     const actors = game.actors.party.members;
     if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
@@ -49,21 +38,9 @@ export async function updateWorldTime(total, diff) {
 //     await updateFrequency(combatant.token.actor, 0, {}, "endTurn");
 // }
 
-export async function pf2eStartTurn(combatant, _encounter, _userID) {
-    await updateFrequency(combatant.token.actor, 0, {}, "startTurn");
-}
-
 export async function combatRound(encounter, _changes, _diff, _userID) {
     const actors = encounter.combatants.contents.map(
         (combatant) => combatant.token.actor
     );
     await updateFrequencyOfActors(actors, 0, _diff, "endRound");
-}
-
-
-export async function combatStart(encounter, _current) {
-    const actors = encounter.combatants.contents.map(
-        (combatant) => combatant.token.actor
-    );
-    await updateFrequencyOfActors(actors, 0, {}, "startCombat");
 }

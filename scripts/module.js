@@ -1,34 +1,17 @@
 import { DAY, HOUR, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
-import { combatRound, combatStart, pf2eEndTurn, pf2eStartTurn, preCreateChatMessage, updateItem, updateWorldTime } from "./hooks.js";
+import { combatRound, updateItem, updateWorldTime } from "./hooks.js";
 
 Hooks.once("ready", function () {
   console.log("PF2E Uses Updater is Active");
   if (!game.user.isGM) return;
+  //Check if item frequency is updated
   Hooks.on("updateItem", updateItem);
-
-  //Lowering Item use count if you don't have action support active
-  Hooks.on("preCreateChatMessage", preCreateChatMessage);
 
   //Refreshing item usage count
   Hooks.on("updateWorldTime", updateWorldTime);
 
-  // Hooks.on("pf2e.endTurn", pf2eEndTurn);
-  Hooks.on("pf2e.startTurn", pf2eStartTurn);
   Hooks.on("combatRound", combatRound);
-
-  Hooks.on("combatStart", combatStart);
 });
-
-export function checkActionSupport() {
-  const actionSupportLikeModuleIDS = [
-    "pf2e-action-support",
-    "pf2e-additional-automations",
-  ];
-  return !actionSupportLikeModuleIDS.some(
-    (id) =>
-      game.modules.get(id)?.active && game.settings.get(id, "decreaseFrequency")
-  );
-}
 
 export async function updateFrequencyOfActors(
   party,
@@ -60,10 +43,10 @@ export async function updateFrequency(character, total, diff, situation = "defau
   }
 }
 
-export function isItemRelevant(item, total, diff, situation) {
+export async function isItemRelevant(item, total, diff, situation) {
   if (!item?.getFlag(MODULE_ID, "cooldown")) updateItem(item, item, diff, null);
   const { cooldown } = item?.getFlag(MODULE_ID, "cooldown") || {};
-  const isSpecialCase = checkAndHandleSpecialCase(item, total, diff, situation);
+  const isSpecialCase = await checkAndHandleSpecialCase(item, total, diff, situation);
   if (!cooldown && !isSpecialCase) return false;
   switch (situation) {
     case "updateTime":
@@ -71,12 +54,8 @@ export function isItemRelevant(item, total, diff, situation) {
         item?.system?.frequency?.value < item?.system?.frequency?.max &&
         (cooldown <= total || ["turn", "round"].includes(cooldown))
       );
-    case "startTurn":
-      return cooldown === "turn";
-    //case "endTurn":
-    case "startCombat":
     case "endRound":
-      return ["turn", "round"].includes(cooldown);
+      return false; // TODO replace me with code for possibly handling longer cooldowns coming up mid combat?
     default:
       return (
         item?.system?.frequency?.value < item?.system?.frequency?.max &&
@@ -89,9 +68,9 @@ export function getCoolDownTime(frequency) {
   const currentTime = game.time.worldTime;
   switch (frequency.per) {
     case "turn":
-      return "turn";
+      return "turn";//Note this is handled by the system (in combat)
     case "round":
-      return "round";
+      return "round";//Note this is handled by the system (in combat)
     case "PT1M": // per 1 Minute
       return currentTime + 1;
     case "PT10M": // per 10 Minutes
@@ -140,7 +119,7 @@ export async function checkAndHandleSpecialCase(item, _total, diff, _situation) 
             });
           } else if (mode === 'auto') {
             await actor.update({ "system.attributes.hp.value": health + actor.system.attributes.hp.value })
-            await ChatMessage.create({ content: `@UUID[Compendium.pf2e.equipment-srd.Item.4A8SFipG78SMWQEU] healed <b>${actor.name}</b> for ${health}` })
+            await ChatMessage.create({ content: `@UUID[Compendium.pf2e.equipment-srd.Item.4A8SFipG78SMWQEU] healed <b>${actor.name}</b> for ${health}` });
           }
         }
       }

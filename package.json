@@ -1,0 +1,19 @@
+{
+  "name": "pf2e-usage-updater",
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "vite build --watch",
+    "changelog": "changelog --format markdownlint --create --release"
+  },
+  "author": "Chasarooni",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "keep-a-changelog": "^2.5.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "foundry-pf2e": "github:reonZ/foundry-pf2e"
+  }
+}
