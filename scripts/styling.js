@@ -29,8 +29,10 @@ const icons = {
     days: 'fa-calendar-day',
     hours: 'fa-clock',
     minutes: 'fa-hourglass-half',
+    turns: 'fa-stopwatch',
     seconds: 'fa-stopwatch'
 }
+
 function formatTime(seconds, format = 'symbols') {
     const units = [
         { name: 'day', seconds: DAY },
@@ -64,7 +66,7 @@ function formatTime(seconds, format = 'symbols') {
             return `${largestUnit.remainder > 0 ? '>' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name}${largestUnit.count !== 1 ? 's' : ''}`;
         case 'symbols':
             let iconOutput = '';
-            if (count > 0) {
+            if (largestUnit.count > 0) {
                 iconOutput += `<i class="fas ${icons[largestUnit.name + 's']}"></i>`.repeat(largestUnit.count);
                 if (largestUnit.remainder > 0) {
                     iconOutput += `<i class="far ${icons[largestUnit.name + 's']}"></i>`;
