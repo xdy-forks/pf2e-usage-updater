@@ -47,13 +47,14 @@ export async function combatRound(encounter, _changes, _diff, _userID) {
 }
 
 Hooks.on("renderCharacterSheetPF2e", (_sheet, html, character) => {
-    const a = _sheet.actor;
-    if (character.owner) {
-        const actionsList = html.find(
-            ".sheet-body .actions-container .actions-panels"
-        );
+    if (game.settings.get(MODULE_ID, "inventory.icon.enabled") && !(game.settings.get(MODULE_ID, "inventory.icon.gm-only") && !game.user.isGM)) {
+        const a = _sheet.actor;
+        if (character.owner) {
+            const actionsList = html.find(
+                ".sheet-body .actions-container .actions-panels"
+            );
 
-        showCooldownsOnSheet(actionsList, a);
-
+            showCooldownsOnSheet(actionsList, a);
+        }
     }
 })

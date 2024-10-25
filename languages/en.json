@@ -18,6 +18,30 @@
             "auto": "Automatic"
           }
         }
+      },
+      "inventory": {
+        "icon": {
+          "enabled": {
+            "name": "Show Cooldown Icons in Inventory",
+            "hint": "Adds icons that show the cooldown of actions to the user if they own the creature"
+          },
+          "gm-only": {
+            "name": "Show only for GMs",
+            "hint": "Locks the feature to adds icons that show the cooldown as a GM only feature, overrides the 'Player Enabled' feature"
+          },
+          "style": {
+            "name": "How to show time remaining?",
+            "hint": "Based on this setting adds text to the tooltip to show the time remaining on the cooldown. Certain settings allow for vague time left than others",
+            "choices": {
+              "disabled": "Disabled",
+              "symbols": "Symbols",
+              "largest-full": "Largest Unit, Full Unit Name",
+              "largest-short": "Largest Unit, Short Unit Name",
+              "all-full": "All Units, Full Unit Name",
+              "all-short": "All Unit, Short Unit Name"
+            }
+          }
+        }
       }
     }
   }
