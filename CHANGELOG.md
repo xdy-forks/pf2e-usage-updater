@@ -1,3 +1,6 @@
+## 2.2.1 - Styling it Up
+- Fixed errors with styling (@xdy)
+
 ## 2.2.0 - Feel like a Kami
 
 - Now requires PF2e System version `6.5.0`+
