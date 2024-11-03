@@ -74,7 +74,7 @@ function formatTime(seconds, format = 'symbols') {
         case 'all-short':
             return result.map(r => `${r.count}${r.name.charAt(0)}`).join(' ');
         case 'largest-short':
-            return `${largestUnit.remainder > 0 ? '< ' : ""}${largestUnit.remainder > 0 ? largestUnit.count + 1 : largestUnit.count} ${largestUnit.name.charAt(0)}`;
+            return `${largestUnit?.remainder > 0 ? '< ' : ""}${largestUnit?.remainder > 0 ? largestUnit?.count + 1 : largestUnit?.count} ${largestUnit?.name.charAt(0)}`;
         case 'all-full':
             return result.map(r => `${r.count} ${r.name}${r.count !== 1 ? 's' : ''}`).join(' ');
         case 'largest-full':
