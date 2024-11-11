@@ -1,45 +1,78 @@
 import { MODULE_ID } from "./helper/const.js";
+import { getCanvasActors } from "./lib/helpers.js";
 import { getCoolDownTime, updateFrequencyOfActors } from "./module.js";
 import { showCooldownsOnSheet } from "./styling.js";
 
+/**
+ * Updates an item's cooldown flag based on frequency changes.
+ * 
+ * @param {Object} item - The item to be updated.
+ * @param {Object} changes - The changes being applied to the item.
+ * @param {*} _diff - Unused parameter (possibly for future use).
+ * @param {*} _userID - Unused parameter (possibly for future use).
+ */
 export async function updateItem(item, changes, _diff, _userID) {
-    //Use this to set item flags
-    //Ignore day (as that is handled by the system)
     const usesChange = changes?.system?.frequency?.value;
     const maxUses = item?.system?.frequency?.max;
+
+    // If uses are less than max, update or set cooldown flag
     if (usesChange < maxUses) {
-        // change is a frequency change, and it's lower than max
-        const flag = item.getFlag(MODULE_ID, "cooldown");
-        if (!flag || flag.per !== item?.system?.frequency?.per) {
-            const cooldown = getCoolDownTime(item?.system?.frequency);
-            if (cooldown) {
-                item.setFlag(MODULE_ID, "cooldown", {
-                    cooldown,
-                    per: item?.system?.frequency?.per,
-                });
-            }
+        updateCooldownFlag(item);
+    }
+    // If uses are at or above max, remove cooldown flag
+    else if (usesChange && usesChange >= maxUses) {
+        item.unsetFlag(MODULE_ID, "cooldown");
+    }
+}
+
+/**
+ * Updates the cooldown flag for an item.
+ * 
+ * @param {Object} item - The item to update the cooldown flag for.
+ */
+function updateCooldownFlag(item) {
+    const currentFlag = item.getFlag(MODULE_ID, "cooldown");
+    const frequencyPer = item?.system?.frequency?.per;
+
+    const shouldUpdateFlag = !currentFlag ||
+        currentFlag.per !== frequencyPer ||
+        (currentFlag.hasOwnProperty('cooldown') && !currentFlag?.cooldown) ||
+        !currentFlag.hasOwnProperty('version');
+
+    if (shouldUpdateFlag) {
+        const cooldown = getCoolDownTime(item?.system?.frequency);
+        if (cooldown) {
+            item.setFlag(MODULE_ID, "cooldown", {
+                cooldown,
+                per: frequencyPer,
+                version: game.modules?.get(MODULE_ID)?.version
+            });
         }
-    } else if (usesChange && usesChange >= maxUses) {
-        item.unsetFlag(MODULE_ID, "cooldown")
     }
 }
 
+/**
+ * Updates the world time and refreshes frequency-based abilities for actors.
+ * 
+ * @param {number} total - The total amount of time passed.
+ * @param {number} diff - The difference in time since the last update.
+ */
 export async function updateWorldTime(total, diff) {
-    const actors = game.actors.party.members;
-    if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
-        actors.push(...(canvas?.tokens?.placeables?.map((t) => t?.actor) ?? []));
-    }
-    await updateFrequencyOfActors(
-        actors,
-        total,
-        diff,
-        !game.combat ? "updateTime" : "default"
-    );
-}
+    // Get party members
+    let actors = game.actors.party.members;
 
-// export async function pf2eEndTurn(combatant, _encounter, _userID) {
-//     await updateFrequency(combatant.token.actor, 0, {}, "endTurn");
-// }
+    // Include canvas tokens if the setting is enabled
+    if (game.settings.get(MODULE_ID, "include-canvas.enabled")) {
+        const canvasActors = getCanvasActors();
+        actors = actors.concat(canvasActors);
+    }
+
+    // Determine the update type based on combat status
+    const updateType = game.combat ? "default" : "updateTime";
+
+    // Update frequency-based abilities for all relevant actors
+    await updateFrequencyOfActors(actors, total, diff, updateType);
+}
 
 export async function combatRound(encounter, _changes, _diff, _userID) {
     const actors = encounter.combatants.contents.map(

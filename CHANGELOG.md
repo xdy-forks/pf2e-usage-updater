@@ -1,4 +1,11 @@
+## 2.2.2 - 11/11 Make a Wish
+
+- Fixed error for items with improperly formed flags (@Maple)
+- Added version to item cooldown flags
+- Added a check for items with a Cooldown Flag that has no cooldown
+
 ## 2.2.1 - Styling it Up
+
 - Fixed errors with styling (@xdy)
 
 ## 2.2.0 - Feel like a Kami
