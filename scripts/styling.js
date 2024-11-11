@@ -53,11 +53,11 @@ function formatTime(seconds, format = 'symbols') {
         { name: 'day', seconds: DAY },
         { name: 'hour', seconds: HOUR },
         { name: 'minute', seconds: MINUTE },
-        { name: 'turn', seconds: 6 }
+        { name: 'turn', seconds: 6 },
     ];
 
     let result = [];
-    let largestUnit = null;
+    let largestUnit = { name: "day", count: 0, remainder: 0 }; //Default Value
 
     for (let unit of units) {
         const count = Math.floor(seconds / unit.seconds);
@@ -82,7 +82,7 @@ function formatTime(seconds, format = 'symbols') {
         case 'symbols':
             let iconOutput = '';
             if (largestUnit.count > 0) {
-                iconOutput += `<i class='${icons[largestUnit.name].full}'></i> `.repeat(largestUnit.count);
+                iconOutput += `<i class='${icons[largestUnit.name].full}'></i> `.repeat(largestUnit?.count ?? 0);
                 if (largestUnit.remainder > 0) {
                     iconOutput += `<i class='${icons[largestUnit.name].half}'></i>`;
                 }
