@@ -3,6 +3,7 @@
 - Fixed error for items with improperly formed flags (@Maple)
 - Added version to item cooldown flags
 - Added a check for items with a Cooldown Flag that has no cooldown
+- Fixed formatting so it properly shows up for all items
 
 ## 2.2.1 - Styling it Up
 
