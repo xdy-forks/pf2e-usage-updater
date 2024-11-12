@@ -73,7 +73,7 @@ function formatTime(seconds, format = 'symbols') {
     } else {
         for (let unit of units) {
             const count = Math.floor(seconds / unit.seconds);
-            if (count > 0 || result.length > 0) {
+            if (count > 0) {
                 result.push({ name: unit.name, count: count, remainder: count % unit.seconds });
                 seconds %= unit.seconds;
                 if (!largestUnit) largestUnit = { name: unit.name, count: count, remainder: seconds % unit.seconds };
