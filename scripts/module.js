@@ -10,7 +10,7 @@ Hooks.once("ready", function () {
   //Refreshing item usage count
   Hooks.on("updateWorldTime", updateWorldTime);
 
-  Hooks.on("combatRound", combatRound);
+  //Hooks.on("combatRound", combatRound);
 });
 
 /**
