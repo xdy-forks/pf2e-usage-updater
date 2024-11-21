@@ -5,7 +5,7 @@
       "include-canvas": {
         "enabled": {
           "name": "Include Canvas Tokens On Timebased Refreshed",
-          "hint": "When enabled will not just check the party, but also all tokens on the canvas to see to refresh their uses"
+          "hint": "When enabled will not just check the party, but also all tokens on the canvas to see to refresh their uses. Note this will have performance implications if you have a large number of actors"
         }
       },
       "automate-item": {

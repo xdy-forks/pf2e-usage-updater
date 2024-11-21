@@ -1,6 +1,8 @@
 import { DAY, HOUR, MINUTE, MODULE_ID, MONTH, WEEK, YEAR } from "./helper/const.js";
 import { combatRound, updateItem, updateWorldTime } from "./hooks.js";
 
+export const cooldownCache = new Map();
+
 Hooks.once("ready", function () {
   console.log("PF2E Uses Updater is Active");
   if (!game.user.isGM) return;
@@ -21,15 +23,22 @@ Hooks.once("ready", function () {
  * @param {string} [situation="default"] - The situation context.
  * @returns {Promise<void>}
  */
-export async function updateFrequencyOfActors(
-  party,
-  total,
-  diff,
-  situation = "default"
-) {
+export async function updateFrequencyOfActors(party, total, diff, situation = "default") {
+  const updates = [];
+  const specialCaseUpdates = [];
+
   for (const character of party) {
-    await updateFrequency(character, total, diff, situation);
+    const { itemUpdates } = await processCharacterItems(character, total, diff, situation);
+    updates.push(...itemUpdates);
+    //specialCaseUpdates.push(...specialCases);
   }
+
+  if (updates.length > 0) {
+    await Item.updateDocuments(updates);
+  }
+
+  // Handle special cases asynchronously
+  //specialCaseUpdates.forEach(update => update());
 }
 
 /**
@@ -43,7 +52,7 @@ export async function updateFrequencyOfActors(
 export async function updateFrequency(character, total, diff, situation = "default") {
   const items = character.items.contents;
   const relevantItems = items.filter((it) =>
-    isItemRelevant(it, total, diff, situation)
+    ['action', 'equipment'].includes(it.type) && isItemRelevant(it, total, diff, situation)
   );
   relevantItems.forEach((it) => {
     it.unsetFlag(MODULE_ID, "cooldown");
@@ -59,6 +68,31 @@ export async function updateFrequency(character, total, diff, situation = "defau
   }
 }
 
+async function processCharacterItems(character, total, diff, situation) {
+  const itemUpdates = [];
+  const specialCases = [];
+  const relevantItems = character.items.contents.filter(it => checkSpecialCases(it) || isItemRelevant(it, total, diff, situation));
+
+  for (const item of relevantItems) {
+    if (checkSpecialCases(it)) {
+      //specialCases.push(() => handleSpecialCase(item, total, diff, situation));
+      specialCases.push(item)
+      await handleSpecialCase(item, total, diff, situation)
+    } else {
+
+      item.unsetFlag(MODULE_ID, "cooldown");
+      itemUpdates.push({
+        _id: item.id,
+        "system.frequency.value": item.system.frequency?.max ?? 1
+      });
+
+
+    }
+  }
+
+  return { itemUpdates, specialCases };
+}
+
 /**
  * Checks if an item is relevant for updating based on cooldown and situation.
  * @param {Object} item - The item to check.
@@ -67,24 +101,25 @@ export async function updateFrequency(character, total, diff, situation = "defau
  * @param {string} situation - The situation context.
  * @returns {Promise<boolean>}
  */
-export function isItemRelevant(item, total, diff, situation) {
-  if (!item?.getFlag(MODULE_ID, "cooldown")) updateItem(item, item, diff, null);
-  const { cooldown } = item?.getFlag(MODULE_ID, "cooldown") || {};
-  const isSpecialCase = checkAndHandleSpecialCase(item, total, diff, situation);
-  if (!cooldown && !isSpecialCase) return false;
+function isItemRelevant(item, total, diff, situation) {
+  if (!cooldownCache.has(item.uuid)) {
+    const cooldown = item.getFlag(MODULE_ID, "cooldown")?.cooldown;
+    cooldownCache.set(item.uuid, cooldown);
+  }
+
+  const cooldown = cooldownCache.get(item.uuid);
+  if (!cooldown) return false;
+
+  const frequency = item.system.frequency;
+  if (!frequency || frequency.value >= frequency.max) return false;
+
   switch (situation) {
     case "updateTime":
-      return (
-        item?.system?.frequency?.value < item?.system?.frequency?.max &&
-        (cooldown <= total || ["turn", "round"].includes(cooldown))
-      );
+      return cooldown <= total || ["turn", "round"].includes(cooldown);
     case "endRound":
-      return false; // TODO replace me with code for possibly handling longer cooldowns coming up mid combat?
+      return false; // TODO: Implement logic for handling longer cooldowns in combat
     default:
-      return (
-        item?.system?.frequency?.value < item?.system?.frequency?.max &&
-        cooldown <= total
-      );
+      return cooldown <= total;
   }
 }
 
@@ -135,7 +170,7 @@ export function getCombatActor() {
  * @param {string} _situation - The situation context (unused).
  * @returns {Promise<boolean>}
  */
-export async function checkAndHandleSpecialCase(item, _total, diff, _situation) {
+export async function handleSpecialCase(item, _total, diff, _situation) {
   const slug = item.system.slug;
   const actor = item.actor;
   switch (slug) {
@@ -169,4 +204,8 @@ export async function checkAndHandleSpecialCase(item, _total, diff, _situation) 
       break;
   }
   return false;
+}
+
+export function checkSpecialCases(item) {
+  return ['aeon-stone-pearly-white-spindle'].includes(item.slug);
 }
