@@ -1,3 +1,6 @@
+## 2.3.1 - Polish Lion
+- Added Polish Translation (@Liohart)
+
 ## 2.3.0 - Performance Improvements
 - Optimized code for checking for uses (thanks to @Zullock and @A Dirty Ewok for bringing performance concerns to light)
 - Added a caching system for uses during a play session
