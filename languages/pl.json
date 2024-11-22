@@ -1,0 +1,48 @@
+{
+  "I18N.LANGUAGE": "Polski",
+  "pf2e-usage-updater": {
+    "module-settings": {
+      "include-canvas": {
+        "enabled": {
+          "name": "Dołącz tokeny płótna przy odświeżaniu czasowym",
+          "hint": "Po włączeniu będzie sprawdzać nie tylko daną drużynę, ale także wszystkie tokeny na płótnie, aby odświeżyć ich użycie. Zwróć uwagę, że będzie to miało wpływ na wydajność, jeśli masz dużą liczbę aktorów"
+        }
+      },
+      "automate-item": {
+        "aeon-pearly-white": {
+          "name": "Automatyzacja Kamienia Eonów (Perłowo Białe Wrzeciono)",
+          "hint": "Automatyzuje leczenie perłowo-białego wrzeciona z kamienia eonów (obecnie tylko poza walką) (rzut: Rzuć leczenie, automatycznie: Ulecz aktora + wiadomość)",
+          "choices": {
+            "disabled": "Wyłączone",
+            "roll": "Rzut",
+            "auto": "Automatyczny"
+          }
+        }
+      },
+      "inventory": {
+        "icon": {
+          "enabled": {
+            "name": "Pokaż ikony czasu odnowienia w ekwipunku",
+            "hint": "Dodaje ikony, które pokazują użytkownikowi czas odnowienia akcji, jeśli jest właścicielem stworzenia"
+          },
+          "gm-only": {
+            "name": "Pokaz tylko dla MG",
+            "hint": "Blokuje funkcję, aby dodać ikony pokazujące czas odnowienia jako funkcję tylko dla MG, zastępując funkcję „Włączone dla gracza”"
+          },
+          "style": {
+            "name": "Jak wyświetlić pozostały czas?",
+            "hint": "W oparciu o to ustawienie dodaje tekst do podpowiedzi, aby pokazać czas pozostały do końca okresu odnowienia. Niektóre ustawienia pozwalają na mniejszą ilość czasu niż inne",
+            "choices": {
+              "disabled": "Wyłączone",
+              "symbols": "Symbole",
+              "largest-full": "Największa jednostka, pełna nazwa",
+              "largest-short": "Największa jednostka, krótka nazwa",
+              "all-full": "Wszystkie jednostki, pełna nazwa",
+              "all-short": "Wszystkie jednostki, krótka nazwa"
+            }
+          }
+        }
+      }
+    }
+  }
+}
